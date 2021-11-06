@@ -1,5 +1,10 @@
 # news-rss-reader
-Reads RSS feeds from news sources. Separates feeds by category.
+Reads, organizes, and formats news RSS feeds.
 
-* **Languages**: Javascript, HTML, CSS
-* **Uses**: React, Bootstrap
+#### Features
+* Separates feeds by category (e.g. World, Tech, U.S., Business).
+* Pulls from multiple online news sources (e.g. New York Times, Wall Street Journal).
+
+#### Technologies
+* Written in Javascript, HTML, and CSS (Bootstrap).
+* Uses React.
