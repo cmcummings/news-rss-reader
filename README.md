@@ -7,5 +7,12 @@ Reads, organizes, and formats news RSS feeds.
   * [Wall Street Journal](https://www.wsj.com/news/rss-news-and-feeds)
   * [The Guardian](https://www.theguardian.com/help/feeds)
 
+### Usage
+1. Change directory into the project folder.
+2. Then, run:
+```
+npm start
+```
+
 ##
 ![nrrexample](https://user-images.githubusercontent.com/42192146/140623866-26317e9d-978e-4c82-9ba8-53d77e2e12bf.png)
