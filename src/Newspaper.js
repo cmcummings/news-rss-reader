@@ -38,7 +38,7 @@ function Newspaper() {
             window.location.replace("/n/")
         }
 
-        document.title = np.name + " - CNRR"
+        document.title = np.name + " - News RSS Reader"
         setNewspaper(np)
 
         // Determine category
