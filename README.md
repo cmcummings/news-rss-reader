@@ -5,3 +5,7 @@ Reads, organizes, and formats news RSS feeds.
 * Pulls from multiple online news sources:
   * [New York Times](https://archive.nytimes.com/www.nytimes.com/services/xml/rss/index.html)
   * [Wall Street Journal](https://www.wsj.com/news/rss-news-and-feeds)
+  * The Guardian
+
+##
+![nrrexample](https://user-images.githubusercontent.com/42192146/140623866-26317e9d-978e-4c82-9ba8-53d77e2e12bf.png)
