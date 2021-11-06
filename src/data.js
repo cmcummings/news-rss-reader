@@ -4,8 +4,9 @@ let categories = {
     world: "World",
     us: "U.S.",
     tech: "Tech",
-    usbiz: "U.S. Business",
-    market: "Markets"
+    biz: "Business",
+    market: "Markets",
+    health: "Health"
 }
 
 // List of available newspapers and their details
@@ -24,10 +25,21 @@ let newspapers = [
         id: 'wsj',
         name: "Wall Street Journal",
         categories: {
-            usbiz: "https://feeds.a.dj.com/rss/WSJcomUSBusiness.xml",
+            biz: "https://feeds.a.dj.com/rss/WSJcomUSBusiness.xml",
             world: "https://feeds.a.dj.com/rss/RSSWorldNews.xml",
             tech: "https://feeds.a.dj.com/rss/RSSWSJD.xml",
             market: "https://feeds.a.dj.com/rss/RSSMarketsMain.xml",
+        }
+    },
+    {
+        id: 'guardian',
+        name: "The Guardian",
+        categories: {
+            world: "https://www.theguardian.com/world/rss",
+            us: "https://www.theguardian.com/us-news/rss",
+            tech: "https://www.theguardian.com/us/technology/rss",
+            health: "https://www.theguardian.com/lifeandstyle/health-and-wellbeing/rss",
+            biz: "https://www.theguardian.com/us/business/rss"
         }
     }
 ]

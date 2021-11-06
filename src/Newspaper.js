@@ -3,12 +3,34 @@ import { useEffect, useState } from "react";
 import { newspapers, categories } from "./data";
 import axios from "axios";
 import './Newspaper.css'
+import logo from "./res/logo.png"
 
 function Newspaper() {
     let params = useParams()
     let [newspaper, setNewspaper] = useState(null)
     let [articles, setArticles] = useState([])
     let [showAmount, setShowAmount] = useState(10) // How many articles to show
+
+    function parseDescription(desc) {
+        let description = ""
+        let counting = true
+        for (let i = 0; i < desc.length; i++) {
+            let c = desc[i]
+            if (c === "<") {
+                counting = false
+            }
+
+            if (counting) {
+                description += c
+            }
+
+            if (c === ">") {
+                counting = true
+                description += " "
+            }
+        }
+        return description
+    }
 
     useEffect(() => {
         let np = newspapers.find(e => e.id === params.newspaper)
@@ -41,7 +63,11 @@ function Newspaper() {
                 let article = articlesXML[i]
                 let title = article.getElementsByTagName("title")[0].textContent
                 let url = article.getElementsByTagName("link")[0].textContent
-                let description = article.getElementsByTagName("description")[0].textContent
+
+                // Parse description
+                let description = parseDescription(article.getElementsByTagName("description")[0].textContent)
+
+                // Parse published date
                 let pubDate = article.getElementsByTagName("pubDate")[0].textContent
                 pubDate = pubDate.split(" ").slice(0, 4).join(" ") // Remove junk
 
@@ -75,7 +101,7 @@ function Newspaper() {
                     {/* Top navbar */}
                     <nav class="navbar sticky-top navbar-expand-lg navbar-light bg-light border-bottom">
                         <div class="container-fluid">
-                            <a class="navbar-brand" href="/">News RSS Reader</a>
+                            <a class="navbar-brand" href="/"><img src={logo} height="30"></img></a>
                             <div class="collapse navbar-collapse" id="navbarNav">
                                 <div>
                                     <ul class="navbar-nav">
@@ -90,7 +116,7 @@ function Newspaper() {
                                                 ))}
                                             </ul>
                                         </li>
-                                        <span class="navbar-text"></span>
+                                        
                                         {Object.keys(newspaper.categories).map(cat => (
                                             <li className="nav-item">
                                                 <a key={cat} 
