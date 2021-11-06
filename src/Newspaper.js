@@ -8,6 +8,7 @@ function Newspaper() {
     let params = useParams()
     let [newspaper, setNewspaper] = useState(null)
     let [articles, setArticles] = useState([])
+    let [showAmount, setShowAmount] = useState(10) // How many articles to show
 
     useEffect(() => {
         let np = newspapers.find(e => e.id === params.newspaper)
@@ -36,7 +37,7 @@ function Newspaper() {
             // Parse XML
             let xml = new DOMParser().parseFromString(response.data, "text/xml");
             let articlesXML = xml.getElementsByTagName("item")
-            for (let i = 0; i < Math.min(10, articlesXML.length); i++) {
+            for (let i = 0; i < articlesXML.length; i++) {
                 let article = articlesXML[i]
                 let title = article.getElementsByTagName("title")[0].textContent
                 let url = article.getElementsByTagName("link")[0].textContent
@@ -64,13 +65,14 @@ function Newspaper() {
         }).catch(error => {
 
         });
-    }, [params])
+    }, [params, showAmount])
 
     return (
         <div>
             {newspaper
                 ?
                 <div>
+                    {/* Top navbar */}
                     <nav class="navbar sticky-top navbar-expand-lg navbar-light bg-light border-bottom">
                         <div class="container-fluid">
                             <a class="navbar-brand" href="/">News RSS Reader</a>
@@ -91,7 +93,10 @@ function Newspaper() {
                                         <span class="navbar-text"></span>
                                         {Object.keys(newspaper.categories).map(cat => (
                                             <li className="nav-item">
-                                                <Link key={cat} to={"/n/" + newspaper.id + "/" + cat} className={params.category === cat ? "nav-link active" : "nav-link"} >{categories[cat]}</Link>
+                                                <a key={cat} 
+                                                    href={"/n/" + newspaper.id + "/" + cat}
+                                                    className={params.category === cat ? "nav-link active" : "nav-link"}
+                                                    >{categories[cat]}</a>
                                             </li>
                                         ))}
                                     </ul>
@@ -100,10 +105,12 @@ function Newspaper() {
                         </div>
                     </nav>
                         
+                    {/* Main view */}
                     <div class="container-sm mt-4">
                         <h2>{categories[params.category]} stories from the {newspaper.name}</h2>
-                        {articles.map((article, i) => (
-                            <div className="card my-2" key={i}>
+                        
+                        {articles.slice(0, showAmount).map((article, i) => (
+                            <div className="card my-2" key={i} id={i}>
                                 <div class="card-body">
                                     <h5 className="card-title"><a href={article.url}>{article.title}</a></h5>
                                     <h6 class="card-subtitle mb-2 text-muted">{article.date}</h6>
@@ -111,6 +118,18 @@ function Newspaper() {
                                 </div>
                             </div>
                         ))}
+
+                        <nav aria-label="Page navigation example">
+                            <ul class="pagination">
+                                <li class="page-item disabled"><a class="page-link" href="#">{"Showing " + showAmount}</a></li>
+                                {articles.map((article, i) => (
+                                    i === articles.length - 1 ? 
+                                    <li class="page-item"><a class="page-link" onClick={() => setShowAmount(articles.length)}>{articles.length} (All)</a></li> 
+                                    : (i > 0 && i % 10 === 0) && 
+                                    <li class="page-item"><a class="page-link" onClick={() => setShowAmount(i)}>{i}</a></li>))
+                                }
+                            </ul>
+                        </nav>
                     </div>
                 </div>
                 :
