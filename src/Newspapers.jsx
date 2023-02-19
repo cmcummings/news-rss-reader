@@ -7,7 +7,7 @@ function Newspapers() {
         <ul>
             {newspapers.map(np => (
                 <li>
-                    <Link to={"/n/" + np.id}>{np.name}</Link>
+                    <Link to={"/news-rss-reader/n/" + np.id}>{np.name}</Link>
                 </li>
             ))}
         </ul>

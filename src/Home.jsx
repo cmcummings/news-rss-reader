@@ -15,7 +15,7 @@ function Home() {
                     <h3>News sources:</h3>
                     <div className="list-group">
                         {newspapers.map(np =>
-                            <a href={"/n/" + np.id} className="list-group-item list-group-item-action">{np.name}</a>
+                            <a href={"/news-rss-reader/n/" + np.id} className="list-group-item list-group-item-action">{np.name}</a>
                         )}
                     </div>
                 </div>

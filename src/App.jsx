@@ -5,10 +5,10 @@ import Newspapers from "./Newspapers";
 
 function App() {
     return (
-        <BrowserRouter>
+        <BrowserRouter basename="/news-rss-reader">
             <Routes>
                 <Route exact path="/" element={<Home />} />
-                <Route path="/n" element={<Newspapers />} />
+                <Route path="/n" element={<Home />} />
                 <Route path="/n/:newspaper" element={<Newspaper />} />
                 <Route path="/n/:newspaper/:category" element={<Newspaper />} />
             </Routes>

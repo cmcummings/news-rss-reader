@@ -16,4 +16,3 @@ Reads, organizes, and formats news RSS feeds.
 ```
 npm run dev
 ```
-
