@@ -14,6 +14,6 @@ Reads, organizes, and formats news RSS feeds.
 1. Change directory into the project folder.
 2. Start the React development server:
 ```
-npm start
+npm run dev
 ```
 
