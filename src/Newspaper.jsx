@@ -34,7 +34,7 @@ function Newspaper() {
     useEffect(() => {
         let np = newspapers.find(e => e.id === params.newspaper)
         if (!np) {
-            window.location.replace("/news-rss-reader/")
+            window.location.replace("/")
         }
 
         document.title = np.name + " - News RSS Reader"
@@ -43,7 +43,7 @@ function Newspaper() {
         // Determine category
         if (params.category) {
             if (!np.categories[params.category]) {
-                window.location.replace("/news-rss-reader/n/" + np.id)
+                window.location.replace("/n/" + np.id)
             }
         }
 
@@ -100,7 +100,7 @@ function Newspaper() {
                     {/* Top navbar */}
                     <nav className="navbar sticky-top navbar-expand-lg navbar-light bg-light border-bottom">
                         <div className="container-fluid">
-                            <a className="navbar-brand" href="/news-rss-reader"><img src={logo} height="30"></img></a>
+                            <a className="navbar-brand" href="/"><img src={logo} height="30"></img></a>
                             <div className="collapse navbar-collapse" id="navbarNav">
                                 <div>
                                     <ul className="navbar-nav">
@@ -111,7 +111,7 @@ function Newspaper() {
                                             <ul className="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                                                 {newspapers.map(np => (
                                                     np.id !== newspaper.id &&
-                                                    <li key={np.id}><a className="dropdown-item" href={"/news-rss-reader/n/" + np.id}>{np.name}</a></li>
+                                                    <li key={np.id}><a className="dropdown-item" href={"/n/" + np.id}>{np.name}</a></li>
                                                 ))}
                                             </ul>
                                         </li>
@@ -119,7 +119,7 @@ function Newspaper() {
                                         {Object.keys(newspaper.categories).map(cat => (
                                             <li className="nav-item">
                                                 <a key={cat} 
-                                                    href={"/news-rss-reader/n/" + newspaper.id + "/" + cat}
+                                                    href={"/n/" + newspaper.id + "/" + cat}
                                                     className={params.category === cat ? "nav-link active" : "nav-link"}
                                                     >{categories[cat]}</a>
                                             </li>

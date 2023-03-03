@@ -5,7 +5,7 @@ import Newspapers from "./Newspapers";
 
 function App() {
     return (
-        <BrowserRouter basename="/news-rss-reader">
+        <BrowserRouter>
             <Routes>
                 <Route exact path="/" element={<Home />} />
                 <Route path="/n" element={<Home />} />
