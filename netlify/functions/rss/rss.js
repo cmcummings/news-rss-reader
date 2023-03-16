@@ -41,7 +41,7 @@ const handler = async (event) => {
     return { 
       statusCode: 500, 
       body: JSON.stringify({ 
-        message: error 
+        message: error.message 
       })
     }
   }
