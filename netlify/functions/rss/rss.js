@@ -1,6 +1,4 @@
 import { categories, newspapers } from "../../../src/data"
-import axios from "axios"
-
 
 const handler = async (event) => {
   try {
@@ -19,9 +17,10 @@ const handler = async (event) => {
     }
     const url = np.categories[category]
 
-    return await axios.request({
+    return await fetch(url, {
       method: 'get',
-      url: url,
+    }).then(res => {
+      return res.text()
     }).then(res => {
       return {
         statusCode: 200,
@@ -32,7 +31,7 @@ const handler = async (event) => {
             categories: Object.keys(np.categories),
           },
           category: category,
-          articleXML: res.data
+          articleXML: res
         }),
       }
     }).catch(() => {
