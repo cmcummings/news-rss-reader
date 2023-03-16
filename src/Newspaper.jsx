@@ -4,92 +4,83 @@ import { newspapers, categories } from "./data";
 import axios from "axios";
 import logo from "./res/logo.png"
 
+function parseDescription(desc) {
+    let description = ""
+    let counting = true
+    for (let i = 0; i < desc.length; i++) {
+        let c = desc[i]
+        if (c === "<") {
+            counting = false
+        }
+
+        if (counting) {
+            description += c
+        }
+
+        if (c === ">") {
+            counting = true
+            description += " "
+        }
+    }
+    return description
+}
+
 function Newspaper() {
     let params = useParams()
     let [newspaper, setNewspaper] = useState(null)
     let [articles, setArticles] = useState([])
     let [showAmount, setShowAmount] = useState(10) // How many articles to show
-
-    function parseDescription(desc) {
-        let description = ""
-        let counting = true
-        for (let i = 0; i < desc.length; i++) {
-            let c = desc[i]
-            if (c === "<") {
-                counting = false
-            }
-
-            if (counting) {
-                description += c
-            }
-
-            if (c === ">") {
-                counting = true
-                description += " "
-            }
-        }
-        return description
-    }
+    let [category, setCategory] = useState(null)
 
     useEffect(() => {
-        let np = newspapers.find(e => e.id === params.newspaper)
-        if (!np) {
-            window.location.replace("/")
-        }
-
-        document.title = np.name + " - News RSS Reader"
-        setNewspaper(np)
-
-        // Determine category
-        if (params.category) {
-            if (!np.categories[params.category]) {
-                window.location.replace("/n/" + np.id)
+        axios.request({
+            method: 'get',
+            url: '/.netlify/functions/rss', 
+            params: {
+                id: params.newspaper,
+                category: params.category
             }
-        }
+        }).then(res => { 
+            document.title = res.data.newspaper.name + " - News RSS Reader"
+            setNewspaper(res.data.newspaper)
+            setCategory(res.data.category)
 
-        params.category = params.category || 'top'
-        if (!np.categories[params.category]) {
-            params.category = Object.keys(np.categories)[0]
-        }
-
-        // Get XML
-        axios.request({ method: 'get', url: np.categories[params.category] }).then((response) => {
             let arts = []
             // Parse XML
-            let xml = new DOMParser().parseFromString(response.data, "text/xml");
+            let xml = new DOMParser().parseFromString(res.data.articleXML, "text/xml");
             let articlesXML = xml.getElementsByTagName("item")
             for (let i = 0; i < articlesXML.length; i++) {
                 let article = articlesXML[i]
                 let title = article.getElementsByTagName("title")[0].textContent
                 let url = article.getElementsByTagName("link")[0].textContent
 
-                // Parse description
-                let description = parseDescription(article.getElementsByTagName("description")[0].textContent)
+                  // Parse description
+                  let description = parseDescription(article.getElementsByTagName("description")[0].textContent)
 
-                // Parse published date
-                let pubDate = article.getElementsByTagName("pubDate")[0].textContent
-                pubDate = pubDate.split(" ").slice(0, 4).join(" ") // Remove junk
+                  // Parse published date
+                  let pubDate = article.getElementsByTagName("pubDate")[0].textContent
+                  pubDate = pubDate.split(" ").slice(0, 4).join(" ") // Remove junk
 
-                let data = {
-                    title: title,
-                    url: url,
-                    description: description,
-                    date: pubDate
-                }
+                  let data = {
+                      title: title,
+                      url: url,
+                      description: description,
+                      date: pubDate
+                  }
 
-                // Not all articles have images
-                let imgXML = article.getElementsByTagName("media:content")[0]
-                if (imgXML) {
-                    data.img = imgXML.getAttribute("url")
-                }
+                  // Not all articles have images
+                  let imgXML = article.getElementsByTagName("media:content")[0]
+                  if (imgXML) {
+                      data.img = imgXML.getAttribute("url")
+                  }
 
-                arts.push(data)
-            }
+                  arts.push(data)
+              }
 
             setArticles(arts)
-        }).catch(error => {
-
-        });
+        }).catch(() => {
+            window.location.replace("/")
+        });;
     }, [params, showAmount])
 
     return (
@@ -116,11 +107,11 @@ function Newspaper() {
                                             </ul>
                                         </li>
                                         
-                                        {Object.keys(newspaper.categories).map(cat => (
-                                            <li className="nav-item">
-                                                <a key={cat} 
+                                        {newspaper.categories.map(cat => (
+                                            <li key={cat} className="nav-item">
+                                                <a 
                                                     href={"/n/" + newspaper.id + "/" + cat}
-                                                    className={params.category === cat ? "nav-link active" : "nav-link"}
+                                                    className={category === cat ? "nav-link active" : "nav-link"}
                                                     >{categories[cat]}</a>
                                             </li>
                                         ))}
@@ -132,7 +123,7 @@ function Newspaper() {
                         
                     {/* Main view */}
                     <div className="container-sm mt-4">
-                        <h2>{categories[params.category]} stories from the {newspaper.name}</h2>
+                        <h2>{categories[category]} stories from the {newspaper.name}</h2>
                         
                         {articles.slice(0, showAmount).map((article, i) => (
                             <div className="card my-2" key={i} id={i}>
@@ -159,7 +150,6 @@ function Newspaper() {
                 </div>
                 :
                 <div>
-                    {params.newspaper} is not a valid newspaper
                 </div>
             }
         </div>

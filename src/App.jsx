@@ -1,7 +1,6 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Home from "./Home";
 import Newspaper from "./Newspaper";
-import Newspapers from "./Newspapers";
 
 function App() {
     return (
