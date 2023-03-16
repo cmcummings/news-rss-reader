@@ -78,7 +78,8 @@ function Newspaper() {
               }
 
             setArticles(arts)
-        }).catch(() => {
+        }).catch((err) => {
+            console.log(err);
             window.location.replace("/")
         });;
     }, [params, showAmount])
